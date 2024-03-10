@@ -1,0 +1,75 @@
+.taskList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .taskItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(236, 236, 236);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    flex: 1 1 300px;
+    margin-bottom: 16px;
+  }
+  
+  .taskLabel {
+    flex: 1;
+    margin-left: 16px;
+  }
+  
+  .taskDetails {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .taskDetails p {
+    margin-bottom: 5px;
+  }
+  .button{
+    background-color: white;
+    font-family: "Montserrat", sans-serif;
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    border: transparent;
+    margin-left: 4px;
+  }
+
+  .button:hover {
+    background-color: red;
+    color: white;
+  }
+  .taskCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #050505;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .taskCheckbox:checked {
+    background-color: #cc2e2e;
+    border-color: #751b1b;
+  }
+
+  .taskButtons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+  }

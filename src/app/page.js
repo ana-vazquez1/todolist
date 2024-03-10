@@ -1,95 +1,91 @@
-import Image from "next/image";
+"use client";
+import React, { useState, useEffect } from "react";
+import TaskList from "./components/TaskList.js";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const task = {
+      name: formData.get("taskName"),
+      startDate: formData.get("startDate"),
+      endDate: formData.get("endDate"),
+      startTime: formData.get("startTime"),
+      endTime: formData.get("endTime"),
+      description: formData.get("description"),
+      checked: false,
+    };
+    setTasks([...tasks, task]);
+    event.target.reset();
+    setIsFormVisible(false);
+  };
+
+  const toggleTask = (index) => {
+    setTasks(
+      tasks.map((task, i) =>
+        i === index ? { ...task, checked: !task.checked } : task
+      )
+    );
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <div>
+      <header className={styles.header}>
+        <nav className={styles.navbar}>
+          <h2 className={styles.titulo}>To Do List</h2>
+          <ul className={styles.navlist}>
+            <li className={styles.navitem}>
+              <button
+                className={styles.button}
+                onClick={() => setIsFormVisible(!isFormVisible)}
+              >
+                Agregar Tarea
+              </button>
+              {isFormVisible && (
+                <form className={styles.form} onSubmit={handleSubmit}>
+                  <h3>Agregar Tarea</h3>
+                  <button type="button" className={styles.closeButton} onClick={() => setIsFormVisible(false)}> x </button>
+                  <label htmlFor="taskName">Nombre de la tarea:</label>
+                  <input type="text" id="taskName" name="taskName" className={styles.input} required />
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+                  <label htmlFor="startDate">Fecha de inicio:</label>
+                  <input type="date" id="startDate" name="startDate" className={styles.input} required />
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+                  <label htmlFor="endDate">Fecha de finalización:</label>
+                  <input type="date" id="endDate" name="endDate" className={styles.input} />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+                  <label htmlFor="startTime">Hora de inicio:</label>
+                  <input type="time" id="startTime" name="startTime" className={styles.input} />
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+                  <label htmlFor="endTime">Hora de finalización:</label>
+                  <input type="time" id="endTime" name="endTime" className={styles.input} />
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+                  <label htmlFor="description">Descripción:</label>
+                  <textarea id="description" name="description" className={styles.input} />
+
+                  <button type="submit" className={styles.button}>
+                    Agregar
+                  </button>
+                </form>
+              )}
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main className={styles.main}>
+        <TaskList tasks={tasks} onToggleTask={toggleTask} />
+      </main>
+    </div>
   );
 }
